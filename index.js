@@ -1,5 +1,5 @@
 const {
-  listContacts,
+  parsedContacts,
   getContactById,
   removeContact,
   addContact,
@@ -18,18 +18,26 @@ program.parse();
 
 const argv = program.opts();
 
+/**
+ * Обрабатывае значение полученного экшена и запускает нужную функциюю
+ * @param {string} action, тип дейтсвия
+ * @param {string} id, ID контакта
+ * @param {string} name, имя контакта
+ * @param {string} email, имя электронная почта контакта
+ * @param {string} phone, номер телефона контакта
+ */
 const invokeAction = async ({ action, id, name, email, phone }) => {
   switch (action) {
     case 'list':
       try {
-        const contacts = await listContacts();
+        const contacts = await parsedContacts();
         console.table(contacts);
       } catch (error) {
         console.error(error);
       }
       break;
 
-    case 'getById':
+    case 'get':
       try {
         const contact = await getContactById(id);
         console.log(contact);
@@ -53,7 +61,7 @@ const invokeAction = async ({ action, id, name, email, phone }) => {
       break;
 
     default:
-      break;
+      console.warn('\x1B[31m Unknown action type!');
   }
 };
 
